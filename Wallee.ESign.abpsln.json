@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "Wallee.ESign": {
+      "path": "Wallee.ESign.abpmdl.json"
+    }
+  }
+}

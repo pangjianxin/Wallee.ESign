@@ -1,0 +1,79 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {},
+      "host": {}
+    }
+  },
+  "packages": {
+    "Wallee.ESign.Domain.Shared": {
+      "path": "src/Wallee.ESign.Domain.Shared/Wallee.ESign.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "Wallee.ESign.Domain": {
+      "path": "src/Wallee.ESign.Domain/Wallee.ESign.Domain.abppkg.json",
+      "folder": "src"
+    },
+    "Wallee.ESign.Application.Contracts": {
+      "path": "src/Wallee.ESign.Application.Contracts/Wallee.ESign.Application.Contracts.abppkg.json",
+      "folder": "src"
+    },
+    "Wallee.ESign.Application": {
+      "path": "src/Wallee.ESign.Application/Wallee.ESign.Application.abppkg.json",
+      "folder": "src"
+    },
+    "Wallee.ESign.EntityFrameworkCore": {
+      "path": "src/Wallee.ESign.EntityFrameworkCore/Wallee.ESign.EntityFrameworkCore.abppkg.json",
+      "folder": "src"
+    },
+    "Wallee.ESign.MongoDB": {
+      "path": "src/Wallee.ESign.MongoDB/Wallee.ESign.MongoDB.abppkg.json",
+      "folder": "src"
+    },
+    "Wallee.ESign.HttpApi": {
+      "path": "src/Wallee.ESign.HttpApi/Wallee.ESign.HttpApi.abppkg.json",
+      "folder": "src"
+    },
+    "Wallee.ESign.HttpApi.Client": {
+      "path": "src/Wallee.ESign.HttpApi.Client/Wallee.ESign.HttpApi.Client.abppkg.json",
+      "folder": "src"
+    },
+    "Wallee.ESign.TestBase": {
+      "path": "test/Wallee.ESign.TestBase/Wallee.ESign.TestBase.abppkg.json",
+      "folder": "test"
+    },
+    "Wallee.ESign.EntityFrameworkCore.Tests": {
+      "path": "test/Wallee.ESign.EntityFrameworkCore.Tests/Wallee.ESign.EntityFrameworkCore.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Wallee.ESign.MongoDB.Tests": {
+      "path": "test/Wallee.ESign.MongoDB.Tests/Wallee.ESign.MongoDB.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Wallee.ESign.Domain.Tests": {
+      "path": "test/Wallee.ESign.Domain.Tests/Wallee.ESign.Domain.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Wallee.ESign.Application.Tests": {
+      "path": "test/Wallee.ESign.Application.Tests/Wallee.ESign.Application.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "Wallee.ESign.HttpApi.Host": {
+      "path": "host/Wallee.ESign.HttpApi.Host/Wallee.ESign.HttpApi.Host.abppkg.json",
+      "folder": "host"
+    },
+    "Wallee.ESign.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/Wallee.ESign.HttpApi.Client.ConsoleTestApp/Wallee.ESign.HttpApi.Client.ConsoleTestApp.abppkg.json",
+      "folder": "test"
+    },
+    "Wallee.ESign.AuthServer": {
+      "path": "host/Wallee.ESign.AuthServer/Wallee.ESign.AuthServer.abppkg.json",
+      "folder": "host"
+    },
+    "Wallee.ESign.Host.Shared": {
+      "path": "host/Wallee.ESign.Host.Shared/Wallee.ESign.Host.Shared.abppkg.json",
+      "folder": "host"
+    }
+  }
+}
