@@ -26,7 +26,7 @@ namespace Wallee.ESign.HttpClientExtensions
 
             foreach (var header in headers)
             {
-                request.Headers.Add(header.Key, header.Value);
+                request.Headers.TryAddWithoutValidation(header.Key, header.Value);
             }
 
             if (jsonData != null)
