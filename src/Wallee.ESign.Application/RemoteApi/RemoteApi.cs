@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Net.Mime;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,52 +36,50 @@ namespace Wallee.ESign.RemoteApi
         public async Task<ESignAuthResponseDto> PersonalTelecom3Factors(CreatePersonalTelecom3FactorsDto input)
         {
             var requestUrl = "/v2/identity/auth/api/individual/telecom3Factors";
-
-            var jsonData = _jsonSerializer.Serialize(input);
-
-            var headers = new Dictionary<string, string>()
+            var content = _jsonSerializer.Serialize(input);
+            var contentMd5 = CalculateContentMd5(content);
+            var appKey = _options.AppSecret;
+            var httpMethod = "POST";
+            var requestHeaders = new Dictionary<string, string>()
             {
-                {"Accept","*/*" },
-                {"Content-MD5","" },
-                {"Content-Type","application/json;charset=UTF-8" },
-                {"X-Tsign-Open-App-Id",_options.AppId},
-                {"X-Tsign-Open-Ca-Timestamp",$"{_clock.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds}"},
-                {"X-Tsign-Open-Auth-Mode","Signature" },
+                {"Accept","application/json" },
+                {"X-Tsign-Open-Ca-Timestamp",$"{_clock.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds:F0}"},
                 {"X-Tsign-Open-Ca-Signature","" },
             };
 
-            CalculateContentMd5(jsonData, ref headers);
-
-            CalculateSignature("POST", requestUrl, ref headers);
-
-            var httpClient = _httpClientFactory.CreateClient("esign");
-
-            var response = await httpClient.PostWithHeadersAsync(requestUrl, headers, jsonData);
-
+            CalculateSignature(appKey, httpMethod, contentMd5, requestUrl, ref requestHeaders);
+            using var httpClient = _httpClientFactory.CreateClient("esign");
+            var response = await httpClient.PostESignWithJson(requestUrl, requestHeaders, content, contentMd5);
             return _jsonSerializer.Deserialize<ESignAuthResponseDto>(await response.Content.ReadAsStringAsync());
         }
-        private void CalculateContentMd5(string jsonData, ref Dictionary<string, string> headers)
-        {
-            var md5Bytes = MD5.HashData(Encoding.UTF8.GetBytes(jsonData));
 
-            headers["Content-MD5"] = Convert.ToBase64String(md5Bytes);
+        private static string CalculateContentMd5(string jsonData)
+        {
+            byte[] md5Bytes = MD5.HashData(jsonData.GetBytes());
+            return Convert.ToBase64String(md5Bytes).ToString();
         }
-        private void CalculateSignature(string httpMethod, string url, ref Dictionary<string, string> headers)
+
+        private static void CalculateSignature(string key, string httpMethod, string contentMd5, string url, ref Dictionary<string, string> headers)
         {
-            var stringToSign = new StringBuilder(httpMethod + "\n");
+            var stringToSign = ManipulateStringToSign(httpMethod, headers["Accept"], contentMd5, "application/json", url);
 
-            stringToSign.Append(headers["Accept"] + "\n");
-            stringToSign.Append(headers["Content-MD5"] + "\n");
-            stringToSign.Append(headers["Content-Type"] + "\n");
-            stringToSign.Append(url);
-
-            using HMACSHA256 mac = new(_options.AppId.GetBytes());
-
-            byte[] hash = mac.ComputeHash(Encoding.UTF8.GetBytes(stringToSign.ToString()));
-
+            using HMACSHA256 mac = new(key.GetBytes());
+            byte[] hash = mac.ComputeHash(stringToSign.GetBytes());
             var signature = Convert.ToBase64String(hash);
-
             headers["X-Tsign-Open-Ca-Signature"] = signature;
+
+            string ManipulateStringToSign(string httpMethod, string accept, string contentMd5, string contentType, string url, string? date = null, string? headers = null)
+            {
+                //https://open.esign.cn/doc/opendoc/identity_service/tdcmzo
+                var stringToSign = httpMethod + "\n" + accept + "\n" + contentMd5 + "\n" + contentType + "\n" + date + "\n";
+                if (headers != null)
+                {
+                    stringToSign += headers + "\n";
+                }
+                stringToSign += url;
+
+                return stringToSign;
+            }
         }
     }
 }

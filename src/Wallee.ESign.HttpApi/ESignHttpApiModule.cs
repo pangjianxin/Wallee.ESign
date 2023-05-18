@@ -36,11 +36,13 @@ public class ESignHttpApiModule : AbpModule
         ConfigureESignClient(context, configuration);
     }
 
-    private void ConfigureESignClient(ServiceConfigurationContext context, IConfiguration configuration)
+    private static void ConfigureESignClient(ServiceConfigurationContext context, IConfiguration configuration)
     {
         context.Services.AddHttpClient("esign", client =>
         {
-            client.BaseAddress = new System.Uri(configuration["ESign:BaseUrl"] ?? throw new UserFriendlyException("请检查是否配置了E签宝的访问域名(ESign:BaseUrl)")) ;
+            client.BaseAddress = new System.Uri(configuration["ESign:BaseUrl"] ?? throw new UserFriendlyException("请检查是否配置了E签宝的访问域名(ESign:BaseUrl)"));
+            client.DefaultRequestHeaders.Add("X-Tsign-Open-Auth-Mode", "Signature");
+            client.DefaultRequestHeaders.Add("X-Tsign-Open-App-Id", configuration["ESign:AppId"] ?? throw new UserFriendlyException("请检查是否配置了E签宝的AppId(ESign:AppId)"));
         });
     }
 }

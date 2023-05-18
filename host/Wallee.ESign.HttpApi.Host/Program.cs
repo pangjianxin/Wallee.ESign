@@ -35,7 +35,7 @@ public class Program
             await builder.AddApplicationAsync<ESignHttpApiHostModule>();
             var app = builder.Build();
             await app.InitializeApplicationAsync();
-            await app.RunAsync();
+            await app.RunAsync("http://*:25001");
             return 0;
         }
         catch (Exception ex)

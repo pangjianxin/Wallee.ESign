@@ -1,8 +1,7 @@
 ﻿namespace Wallee.ESign.RemoteApi
 {
-    public enum PersonalAuthResponseCode
+    public enum PersonalAuthResponseErrorCode:int
     {
-        成功 = 0,
         请核实入参格式是否正确 = 30500000,
         请核实姓名是否为空 = 30500101,
         请输入真实有效的姓名 = 30500101,
